@@ -1,8 +1,10 @@
 FROM python:3.11-slim
 
-# Install Java and Node.js
+# Install Java, C++, Go and Node.js
 RUN apt-get update && apt-get install -y \
     default-jdk \
+    g++ \
+    golang \
     curl \
     && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
