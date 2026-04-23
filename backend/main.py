@@ -127,21 +127,17 @@ def call_ai(prompt: str) -> str:
 
 @app.on_event("startup")
 async def startup_event():
-    """Verify bundled compilers on startup"""
+    """Verify compilers on startup"""
     compiler_status = verify_bundled_compilers()
-    available_count = len(compiler_status["available"])
-    missing_count = len(compiler_status["missing"])
+    available = {k: v for k, v in compiler_status.items() if v != "not found"}
+    missing = {k: v for k, v in compiler_status.items() if v == "not found"}
 
     print(f"\n{'='*60}")
-    print(f"CodeKids Backend - Self-Contained System")
+    print(f"CodeKids Backend")
     print(f"{'='*60}")
-    print(f"[OK] Available Compilers: {available_count}/10")
-    for lang, path in compiler_status["available"].items():
-        print(f"  [*] {lang}")
-    if missing_count > 0:
-        print(f"\n[!] Missing Compilers: {missing_count}/10")
-        for lang, path in compiler_status["missing"].items():
-            print(f"  [ ] {lang}")
+    print(f"[OK] Available: {', '.join(available.keys())}")
+    if missing:
+        print(f"[!] Missing: {', '.join(missing.keys())}")
     print(f"{'='*60}\n")
 
 @app.get("/api/health")
