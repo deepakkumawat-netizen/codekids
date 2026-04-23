@@ -63,7 +63,20 @@ def execute_java(code: str) -> dict:
         if compile_res["exit_code"] != 0:
             return compile_res
 
-        return _run([java, "-cp", tmpdir, "Main"], cwd=tmpdir, timeout=10)
+        result = _run([java, "-cp", tmpdir, "Main"], cwd=tmpdir, timeout=10)
+
+        # Detect interactive input (Scanner) — not supported in cloud execution
+        if "NoSuchElementException" in result["stderr"] or "NoSuchElementException" in result["stdout"]:
+            result["stderr"] = (
+                "This program uses Scanner for user input, which is not supported "
+                "in the cloud runner.\n"
+                "Tip: Remove Scanner and hardcode values to test your logic.\n\n"
+                "Example: instead of 'int num = scanner.nextInt();'\n"
+                "use: 'int num = 10;'"
+            )
+            result["exit_code"] = 1
+
+        return result
 
 
 def execute_cpp(code: str) -> dict:
