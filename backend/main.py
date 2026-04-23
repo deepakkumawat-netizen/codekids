@@ -144,10 +144,6 @@ async def startup_event():
             print(f"  [ ] {lang}")
     print(f"{'='*60}\n")
 
-@app.get("/")
-async def root():
-    return {"message": "CodeKids Backend - Self-Contained AI Code Editor for K-12"}
-
 @app.get("/api/health")
 async def health():
     compiler_status = verify_bundled_compilers()
