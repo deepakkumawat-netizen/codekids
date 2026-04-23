@@ -131,7 +131,7 @@ def execute_go(code: str) -> dict:
             f.write(code)
 
         env = os.environ.copy()
-        env["GOCACHE"] = cache_dir
+        env["GOCACHE"] = "/root/.cache/go-build"  # use pre-warmed Docker cache
         env["GOPATH"] = os.path.join(tmpdir, "gopath")
 
         # Build first, then run (faster than go run on slow CPUs)
