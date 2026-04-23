@@ -1,0 +1,120 @@
+.code-editor-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0;
+  background: var(--bg-light);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-height: 44px;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0 var(--space-md);
+  min-width: 120px;
+  max-width: 180px;
+  height: 44px;
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  background: var(--bg-light);
+}
+
+.tab.active {
+  background: var(--bg);
+  border-bottom: 2px solid var(--primary);
+  color: var(--primary);
+}
+
+.tab-name {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.tab.active .tab-name {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.unsaved {
+  color: var(--warning);
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.tab-close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 12px;
+  transition: all var(--transition-fast);
+  opacity: 0.7;
+}
+
+.tab-close:hover {
+  background: var(--border);
+  color: var(--text);
+  opacity: 1;
+}
+
+.tab.active .tab-close {
+  color: var(--primary);
+}
+
+/* Scrollbar styling */
+.code-editor-tabs::-webkit-scrollbar {
+  height: 6px;
+}
+
+.code-editor-tabs::-webkit-scrollbar-track {
+  background: var(--bg-light);
+}
+
+.code-editor-tabs::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.code-editor-tabs::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .tab {
+    min-width: 100px;
+    max-width: 150px;
+    padding: 0 var(--space-sm);
+  }
+
+  .tab-name {
+    font-size: 11px;
+  }
+
+  .tab-close {
+    font-size: 11px;
+    padding: 2px;
+  }
+}

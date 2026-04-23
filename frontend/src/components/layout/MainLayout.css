@@ -1,0 +1,113 @@
+/**
+ * MainLayout Component Styles
+ * Layout wrapper for header, sidebar, and content
+ */
+
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.main-layout-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ================ MAIN CONTENT ================ */
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: var(--bg);
+  padding: var(--space-lg);
+  margin-left: 0;
+  transition: margin-left var(--transition-normal);
+}
+
+/* With Sidebar */
+.main-content.with-sidebar {
+  margin-left: 280px;
+}
+
+.main-content-wrapper {
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ================ SCROLLBAR ================ */
+
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-content::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* ================ RESPONSIVE ================ */
+
+@media (max-width: 1023px) {
+  .main-content.with-sidebar {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .main-layout {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .main-layout-container {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .main-content {
+    padding: var(--space-md);
+    overflow: visible;
+  }
+
+  .main-content-wrapper {
+    padding: 0;
+  }
+}
+
+/* ================ DARK MODE ================ */
+
+@media (prefers-color-scheme: dark) {
+  .main-layout {
+    background-color: var(--bg);
+    color: var(--text);
+  }
+
+  .main-content {
+    background-color: var(--bg);
+  }
+
+  .main-content::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+
+  .main-content::-webkit-scrollbar-thumb {
+    background: var(--gray-700);
+  }
+
+  .main-content::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-600);
+  }
+}

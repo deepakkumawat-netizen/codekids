@@ -1,0 +1,335 @@
+/**
+ * ProjectBuilderPage Styles - Modern LeetCode-Inspired Design
+ * Multi-file project editor with professional layout
+ */
+
+.project-builder {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #fafbfc;
+  color: #0f172a;
+  gap: 16px;
+  padding: 16px;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* PROJECT HEADER */
+/* ═══════════════════════════════════════════════════════════ */
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 16px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.project-header:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.project-info {
+  display: flex;
+  gap: 16px;
+  flex: 1;
+  min-width: 300px;
+}
+
+.project-info > * {
+  flex: 1;
+  min-width: 150px;
+}
+
+.project-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.project-actions button {
+  white-space: nowrap;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.project-actions button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* EDITOR CONTAINER */
+/* ═══════════════════════════════════════════════════════════ */
+
+.editor-container {
+  display: flex;
+  flex: 1;
+  gap: 16px;
+  min-height: 400px;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.editor-container:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* EDITOR AREA */
+/* ═══════════════════════════════════════════════════════════ */
+
+.editor-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-right: 1px solid #e2e8f0;
+}
+
+.code-editor-wrapper {
+  flex: 1;
+  overflow: auto;
+  background: white;
+}
+
+.code-editor-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.code-editor-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.code-editor-wrapper::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.code-editor-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.code-editor {
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  background: white;
+  color: #0f172a;
+  border: none;
+  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  resize: none;
+  outline: none;
+  tab-size: 2;
+  transition: background-color 0.2s ease;
+}
+
+.code-editor:focus {
+  background: #fafbfc;
+}
+
+.code-editor::placeholder {
+  color: #94a3b8;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* MODAL DIALOG */
+/* ═══════════════════════════════════════════════════════════ */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  backdrop-filter: blur(1px);
+}
+
+.modal-content {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 24px;
+  min-width: 300px;
+  max-width: 500px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.3s ease-out;
+}
+
+.modal-content h3 {
+  margin: 0 0 16px 0;
+  color: #0f172a;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+}
+
+.modal-content input:focus {
+  outline: none;
+  border-color: #399aff;
+  box-shadow: 0 0 0 3px rgba(57, 154, 255, 0.15);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* DARK MODE */
+/* ═══════════════════════════════════════════════════════════ */
+
+@media (prefers-color-scheme: dark) {
+  .project-builder {
+    background: #0f172a;
+    color: #f8fafc;
+  }
+
+  .project-header {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  .editor-container {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  .editor-area {
+    border-right-color: #334155;
+  }
+
+  .code-editor-wrapper {
+    background: #1e293b;
+  }
+
+  .code-editor {
+    background: #1e293b;
+    color: #e2e8f0;
+  }
+
+  .code-editor:focus {
+    background: #334155;
+  }
+
+  .code-editor::placeholder {
+    color: #64748b;
+  }
+
+  .modal-content {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  .modal-content h3 {
+    color: #f8fafc;
+  }
+
+  .modal-content input {
+    background: #334155;
+    border-color: #475569;
+    color: #f8fafc;
+  }
+
+  .modal-content input:focus {
+    border-color: #399aff;
+    box-shadow: 0 0 0 3px rgba(57, 154, 255, 0.2);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* RESPONSIVE DESIGN */
+/* ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .project-builder {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .project-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .project-info {
+    flex-direction: column;
+  }
+
+  .project-actions {
+    width: 100%;
+  }
+
+  .project-actions button {
+    flex: 1;
+  }
+
+  .editor-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .editor-area {
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+}
+
+@media (max-width: 640px) {
+  .project-builder {
+    padding: 8px;
+  }
+
+  .project-header {
+    padding: 12px;
+  }
+
+  .modal-content {
+    min-width: 280px;
+    padding: 16px;
+  }
+
+  .code-editor {
+    font-size: 12px;
+    padding: 8px;
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "object_oriented_programming": [
+    "Classes - A blueprint or template for creating objects with properties and methods",
+    "Objects - Instances of classes that contain specific data and can perform actions",
+    "Inheritance - Creating new classes based on existing ones to reuse code and extend functionality",
+    "Polymorphism - Using the same interface (method name) for different implementations across different classes",
+    "Encapsulation - Hiding internal implementation details and exposing only what's necessary through public methods",
+    "Abstraction - Simplifying complex real-world problems by modeling only essential features"
+  ],
+  "data_structures": [
+    "Arrays/Lists - Ordered collections of elements accessed by numeric index, useful for storing multiple items",
+    "Linked Lists - Collections where each element points to the next, allowing dynamic growth but slower access",
+    "Hash Maps/Dictionaries - Key-value pairs with fast O(1) lookup time, ideal for associating values with unique keys",
+    "Sets - Unordered collections of unique elements, useful for membership testing and removing duplicates",
+    "Trees - Hierarchical data structures with parent-child relationships, used in file systems and databases",
+    "Graphs - Collections of nodes connected by edges, modeling relationships like social networks"
+  ],
+  "algorithms": [
+    "Sorting algorithms - Methods to arrange data in order: bubble sort, merge sort, quick sort, each with different complexity",
+    "Searching algorithms - Finding elements in data: linear search O(n), binary search O(log n) for sorted data",
+    "Recursion - Function calling itself with a base case, useful for tree structures and divide-and-conquer",
+    "Dynamic Programming - Breaking problems into overlapping subproblems and caching results for efficiency",
+    "Greedy algorithms - Making locally optimal choices at each step, useful for optimization problems"
+  ],
+  "functional_programming": [
+    "Pure Functions - Functions that always return the same output for same input, with no side effects",
+    "Immutability - Data that cannot be changed after creation, making code more predictable",
+    "Higher-Order Functions - Functions that take other functions as arguments or return functions",
+    "Closures - Functions that capture and remember variables from their parent scope",
+    "Functional Composition - Combining simple functions to create more complex operations"
+  ],
+  "web_development": [
+    "Client-Server Architecture - Separation between frontend (client) and backend (server) handling different responsibilities",
+    "REST API - Architectural style using HTTP methods (GET, POST, PUT, DELETE) for CRUD operations",
+    "HTTP Methods - GET (retrieve), POST (create), PUT (update), DELETE (remove) for web operations",
+    "Authentication - Verifying user identity using passwords, tokens, or other mechanisms",
+    "Caching - Storing frequently accessed data to improve performance and reduce server load"
+  ],
+  "design_principles": [
+    "DRY (Don't Repeat Yourself) - Write code once and reuse it, avoiding duplication and maintenance issues",
+    "SOLID Principles - Five design principles for maintainable code: Single Responsibility, Open/Closed, Liskov, Interface, Dependency",
+    "KISS (Keep It Simple, Stupid) - Prefer simple solutions over complex ones unless complexity is necessary",
+    "YAGNI (You Aren't Gonna Need It) - Don't add features you don't currently need, avoid over-engineering"
+  ]
+}

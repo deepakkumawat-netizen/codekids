@@ -1,0 +1,38 @@
+{
+  "sorting": [
+    "Bubble Sort - Repeatedly compares adjacent elements, O(n²) time, simple but slow, good for learning fundamentals",
+    "Merge Sort - Divide-and-conquer approach, O(n log n) time, stable sort preserving equal element order",
+    "Quick Sort - Partition-based sorting, O(n log n) average time, very efficient in practice",
+    "Selection Sort - Find minimum and swap, O(n²) time, few writes making it good for slow memory",
+    "Insertion Sort - Build sorted array incrementally, O(n²) time, efficient for small arrays"
+  ],
+  "searching": [
+    "Linear Search - Check each element sequentially, O(n) time, works on unsorted arrays",
+    "Binary Search - Eliminate half remaining elements each step, O(log n) time, requires sorted array",
+    "Jump Search - Jump by fixed size then linear search, O(√n) time, good middle ground",
+    "Hash-based Lookup - O(1) average time using hash tables, very fast but needs hash function"
+  ],
+  "graph_algorithms": [
+    "Breadth-First Search (BFS) - Explore all neighbors before going deeper, finds shortest path in unweighted graphs",
+    "Depth-First Search (DFS) - Go deep before backtracking, uses less memory, useful for topological sorting",
+    "Dijkstra's Algorithm - Find shortest path with weighted edges, greedy approach with priority queue",
+    "Floyd-Warshall - Find shortest paths between all pairs, O(n³) time, good for small dense graphs"
+  ],
+  "dynamic_programming": [
+    "Fibonacci - Compute series by building up from base cases, shows memoization benefits",
+    "0/1 Knapsack - Select items with weight constraint maximizing value, classic DP problem",
+    "Longest Common Subsequence - Find longest sequence common to two strings, string comparison",
+    "Edit Distance - Minimum operations to transform one string to another, spell correction"
+  ],
+  "greedy_algorithms": [
+    "Activity Selection - Select maximum non-overlapping activities, greedy choice of earliest end time",
+    "Huffman Coding - Build optimal prefix-free code tree, data compression technique",
+    "Kruskal's Algorithm - Build minimum spanning tree selecting lightest edges, greedy choice property"
+  ],
+  "complexity_analysis": [
+    "Big O Notation - Describes upper bound growth rate: O(1) constant, O(n) linear, O(n²) quadratic",
+    "Time vs Space Tradeoff - Some algorithms use more memory for faster time or vice versa",
+    "Best, Average, Worst Case - Different inputs cause different performance, quicksort worst case O(n²)",
+    "Amortized Analysis - Average cost per operation over sequence, important for data structures with occasional expensive ops"
+  ]
+}

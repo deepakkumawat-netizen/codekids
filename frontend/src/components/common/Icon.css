@@ -1,0 +1,183 @@
+/**
+ * Icon Component Styles
+ * Unified icon sizing and coloring
+ */
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  line-height: 1;
+  color: inherit;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: color var(--transition-normal);
+}
+
+/* ================ SIZES ================ */
+
+.icon-xs {
+  font-size: 12px;
+  width: 12px;
+  height: 12px;
+}
+
+.icon-sm {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.icon-md {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.icon-lg {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.icon-xl {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.icon-2xl {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+}
+
+.icon-3xl {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+}
+
+/* ================ COLORS ================ */
+
+.icon-primary {
+  color: var(--primary);
+}
+
+.icon-success {
+  color: var(--success);
+}
+
+.icon-warning {
+  color: var(--warning);
+}
+
+.icon-danger {
+  color: var(--danger);
+}
+
+.icon-text {
+  color: var(--text);
+}
+
+.icon-text-secondary {
+  color: var(--text-secondary);
+}
+
+.icon-white {
+  color: white;
+}
+
+/* ================ HOVER EFFECTS ================ */
+
+.icon-interactive:hover {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+
+.icon-interactive:active {
+  transform: scale(0.95);
+}
+
+/* ================ ANIMATION ================ */
+
+.icon-spin {
+  animation: spin 1s linear infinite;
+}
+
+.icon-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.icon-bounce {
+  animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* ================ RESPONSIVE ================ */
+
+@media (max-width: 767px) {
+  .icon-lg {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .icon-xl {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* ================ DARK MODE ================ */
+
+@media (prefers-color-scheme: dark) {
+  .icon-primary {
+    color: var(--primary);
+  }
+
+  .icon-success {
+    color: #34d399;
+  }
+
+  .icon-warning {
+    color: #fbbf24;
+  }
+
+  .icon-danger {
+    color: #f87171;
+  }
+
+  .icon-text {
+    color: var(--text);
+  }
+
+  .icon-text-secondary {
+    color: var(--text-secondary);
+  }
+}

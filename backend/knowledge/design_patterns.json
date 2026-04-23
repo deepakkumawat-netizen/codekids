@@ -1,0 +1,33 @@
+{
+  "creational_patterns": [
+    "Singleton - Ensures only one instance of a class exists throughout the application, useful for resource managers like databases",
+    "Factory - Creates objects without specifying their exact classes, allowing flexibility in object creation",
+    "Builder - Constructs complex objects step by step, separating construction from representation",
+    "Prototype - Creates new objects by cloning existing ones rather than creating from scratch",
+    "Abstract Factory - Creates families of related objects without specifying their concrete classes"
+  ],
+  "structural_patterns": [
+    "Adapter - Converts one interface into another that clients expect, making incompatible interfaces work together",
+    "Decorator - Adds behavior to objects dynamically without modifying their class, using composition over inheritance",
+    "Facade - Provides simplified interface to complex subsystems, hiding complexity behind simple methods",
+    "Proxy - Provides surrogate or placeholder for another object, controlling access and adding additional behavior",
+    "Bridge - Decouples abstraction from implementation so they can vary independently",
+    "Composite - Composes objects into tree structures to represent whole-part hierarchies"
+  ],
+  "behavioral_patterns": [
+    "Observer - Notifies multiple objects about state changes automatically, implementing publish-subscribe mechanism",
+    "Strategy - Encapsulates algorithms that can be swapped, allowing runtime algorithm selection",
+    "Command - Encapsulates requests as objects, allowing queuing and undo/redo functionality",
+    "State - Allows objects to change behavior based on internal state without conditional logic",
+    "Template Method - Defines algorithm skeleton in base class, letting subclasses override specific steps",
+    "Chain of Responsibility - Passes request along chain of handlers until one handles it",
+    "Visitor - Represents operation to perform on object structure elements without changing their classes"
+  ],
+  "pattern_benefits": [
+    "Code Reusability - Design patterns provide proven solutions that can be applied to similar problems",
+    "Maintainability - Patterns make code easier to understand, modify, and extend for other developers",
+    "Scalability - Well-designed patterns help systems grow without major refactoring",
+    "Communication - Patterns provide common vocabulary for developers to discuss design decisions",
+    "Performance - Patterns can be optimized once and benefit all code using them"
+  ]
+}

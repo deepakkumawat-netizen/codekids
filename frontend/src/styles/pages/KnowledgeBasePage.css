@@ -1,0 +1,315 @@
+/**
+ * KnowledgeBasePage Styles - Modern LeetCode-Inspired Design
+ * Interactive concept browser with professional layout
+ */
+
+.knowledge-base-page {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 32px 24px;
+  min-height: 100vh;
+  background: #fafbfc;
+  color: #0f172a;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* PAGE HEADER */
+/* ═══════════════════════════════════════════════════════════ */
+
+.kb-header {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.kb-title {
+  margin: 0 0 12px 0;
+  font-size: 32px;
+  font-weight: 700;
+  color: #0f172a;
+  background: linear-gradient(135deg, #399aff 0%, #2563eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.kb-subtitle {
+  margin: 0;
+  font-size: 16px;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* CONTROLS SECTION */
+/* ═══════════════════════════════════════════════════════════ */
+
+.kb-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.kb-controls:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.filters-grid select {
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: white;
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filters-grid select:hover {
+  border-color: #399aff;
+  box-shadow: 0 0 0 2px rgba(57, 154, 255, 0.1);
+}
+
+.filters-grid select:focus {
+  outline: none;
+  border-color: #399aff;
+  box-shadow: 0 0 0 3px rgba(57, 154, 255, 0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* RESULTS INFO */
+/* ═══════════════════════════════════════════════════════════ */
+
+.results-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.results-info p {
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* CONCEPTS GRID */
+/* ═══════════════════════════════════════════════════════════ */
+
+.concepts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* EMPTY STATE */
+/* ═══════════════════════════════════════════════════════════ */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+  color: #64748b;
+}
+
+.empty-icon {
+  font-size: 64px;
+  margin: 0 0 16px 0;
+  opacity: 0.6;
+}
+
+.empty-title {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.empty-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* DARK MODE */
+/* ═══════════════════════════════════════════════════════════ */
+
+@media (prefers-color-scheme: dark) {
+  .knowledge-base-page {
+    background: #0f172a;
+    color: #f8fafc;
+  }
+
+  .kb-title {
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .kb-subtitle {
+    color: #cbd5e1;
+  }
+
+  .kb-controls {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  .filters-grid select {
+    background: #334155;
+    color: #f8fafc;
+    border-color: #475569;
+  }
+
+  .filters-grid select:hover {
+    border-color: #399aff;
+    box-shadow: 0 0 0 2px rgba(57, 154, 255, 0.2);
+  }
+
+  .filters-grid select:focus {
+    border-color: #399aff;
+    box-shadow: 0 0 0 3px rgba(57, 154, 255, 0.2);
+  }
+
+  .results-info {
+    color: #cbd5e1;
+  }
+
+  .empty-state {
+    color: #94a3b8;
+  }
+
+  .empty-title {
+    color: #f8fafc;
+  }
+
+  .empty-subtitle {
+    color: #64748b;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* RESPONSIVE DESIGN */
+/* ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+  .concepts-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+
+  .kb-title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .knowledge-base-page {
+    gap: 24px;
+    padding: 20px 16px;
+  }
+
+  .kb-header {
+    padding: 16px 0;
+  }
+
+  .kb-title {
+    font-size: 24px;
+  }
+
+  .kb-subtitle {
+    font-size: 14px;
+  }
+
+  .kb-controls {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .filters-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .concepts-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .knowledge-base-page {
+    gap: 16px;
+    padding: 12px;
+  }
+
+  .kb-header {
+    padding: 12px 0;
+  }
+
+  .kb-title {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .kb-subtitle {
+    font-size: 12px;
+  }
+
+  .kb-controls {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .concepts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .empty-state {
+    padding: 48px 16px;
+  }
+
+  .empty-icon {
+    font-size: 48px;
+  }
+
+  .empty-title {
+    font-size: 16px;
+  }
+
+  .empty-subtitle {
+    font-size: 12px;
+  }
+}

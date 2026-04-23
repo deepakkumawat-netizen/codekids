@@ -1,0 +1,182 @@
+/**
+ * Input Component Styles
+ * Text input with label, error states, and icon support
+ */
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.input-wrapper.input-full-width {
+  width: 100%;
+}
+
+/* ================ LABEL ================ */
+
+.input-label {
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--text);
+  display: block;
+  margin-bottom: var(--space-xs);
+}
+
+.input-required {
+  color: var(--danger);
+  margin-left: 4px;
+}
+
+/* ================ FIELD ================ */
+
+.input-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-field input {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  font-family: var(--font-sans);
+  font-size: var(--font-base);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text);
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+/* ================ ICON SUPPORT ================ */
+
+.input-icon-left {
+  position: absolute;
+  left: var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  pointer-events: none;
+  font-size: 18px;
+}
+
+.input-field.input-with-icon input {
+  padding-left: calc(var(--space-lg) * 2.5 + 20px);
+}
+
+/* ================ FOCUS STATE ================ */
+
+.input-field input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(57, 154, 255, 0.1);
+  background-color: var(--bg);
+}
+
+.input-field input:focus ~ .input-icon-left {
+  color: var(--primary);
+}
+
+/* ================ ERROR STATE ================ */
+
+.input-field.input-error input {
+  border-color: var(--danger);
+  background-color: rgba(239, 68, 68, 0.05);
+}
+
+.input-field.input-error input:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.input-error-text {
+  font-size: var(--font-xs);
+  color: var(--danger);
+  margin-top: var(--space-xs);
+  display: block;
+}
+
+/* ================ HELPER TEXT ================ */
+
+.input-helper-text {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  margin-top: var(--space-xs);
+  display: block;
+}
+
+/* ================ DISABLED STATE ================ */
+
+.input-field.input-disabled input {
+  background-color: var(--gray-100);
+  color: var(--text-secondary);
+  border-color: var(--border);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.input-field.input-disabled input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.input-field.input-disabled .input-icon-left {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+/* ================ PLACEHOLDER ================ */
+
+.input-field input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+/* ================ RESPONSIVE ================ */
+
+@media (max-width: 767px) {
+  .input-field input {
+    padding: 12px var(--space-lg);
+    font-size: var(--font-sm);
+  }
+
+  .input-icon-left {
+    font-size: 16px;
+  }
+}
+
+/* ================ DARK MODE ================ */
+
+@media (prefers-color-scheme: dark) {
+  .input-field input {
+    background-color: var(--bg);
+    border-color: var(--border);
+    color: var(--text);
+  }
+
+  .input-field input:focus {
+    box-shadow: 0 0 0 3px rgba(57, 154, 255, 0.15);
+  }
+
+  .input-field.input-disabled input {
+    background-color: var(--gray-800);
+    color: var(--text-secondary);
+  }
+
+  .input-field.input-error input {
+    background-color: rgba(239, 68, 68, 0.08);
+  }
+}
+
+/* ================ AUTOFILL ================ */
+
+.input-field input:-webkit-autofill,
+.input-field input:-webkit-autofill:hover,
+.input-field input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 30px var(--bg) inset !important;
+  -webkit-text-fill-color: var(--text) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}

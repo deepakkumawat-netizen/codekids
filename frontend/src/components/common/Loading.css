@@ -1,0 +1,274 @@
+/**
+ * Loading Component Styles
+ * Spinners, skeleton loaders, and loading states
+ */
+
+/* ================ SPINNER ================ */
+
+.spinner {
+  display: inline-block;
+  border: 3px solid var(--gray-200);
+  border-right-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-full-screen {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+/* Spinner Sizes */
+.spinner-sm {
+  width: 24px;
+  height: 24px;
+  border-width: 2px;
+}
+
+.spinner-md {
+  width: 40px;
+  height: 40px;
+  border-width: 3px;
+}
+
+.spinner-lg {
+  width: 56px;
+  height: 56px;
+  border-width: 4px;
+}
+
+.spinner-xl {
+  width: 72px;
+  height: 72px;
+  border-width: 5px;
+}
+
+/* Spinner Colors */
+.spinner-primary {
+  border-color: var(--gray-200);
+  border-right-color: var(--primary);
+}
+
+.spinner-success {
+  border-color: var(--gray-200);
+  border-right-color: var(--success);
+}
+
+.spinner-warning {
+  border-color: var(--gray-200);
+  border-right-color: var(--warning);
+}
+
+.spinner-danger {
+  border-color: var(--gray-200);
+  border-right-color: var(--danger);
+}
+
+/* Spinner Animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ================ SKELETON LOADER ================ */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--gray-100) 0%,
+    var(--gray-200) 50%,
+    var(--gray-100) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+  border-radius: var(--radius-md);
+}
+
+.skeleton-text {
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-circular {
+  border-radius: 50%;
+}
+
+.skeleton-rectangular {
+  border-radius: var(--radius-lg);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ================ LOADING OVERLAY ================ */
+
+.loading-overlay-container {
+  position: relative;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  z-index: 50;
+  backdrop-filter: blur(2px);
+}
+
+/* ================ CARD SKELETON ================ */
+
+.card-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background-color: var(--bg);
+}
+
+.card-skeleton-image {
+  width: 100%;
+  border-radius: var(--radius-md);
+}
+
+.card-skeleton-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.card-skeleton-title {
+  width: 100%;
+  border-radius: var(--radius-sm);
+}
+
+.card-skeleton-text {
+  width: 100%;
+  border-radius: var(--radius-sm);
+  height: 16px;
+}
+
+/* ================ LOADING DOTS (ALTERNATIVE) ================ */
+
+.loading-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  animation: bounce 1.4s infinite;
+}
+
+.loading-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loading-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+/* ================ PULSE ANIMATION ================ */
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ================ DARK MODE ================ */
+
+@media (prefers-color-scheme: dark) {
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--gray-800) 0%,
+      var(--gray-700) 50%,
+      var(--gray-800) 100%
+    );
+    background-size: 200% 100%;
+  }
+
+  .spinner-primary {
+    border-color: var(--gray-700);
+    border-right-color: var(--primary);
+  }
+
+  .spinner-success {
+    border-color: var(--gray-700);
+    border-right-color: #34d399;
+  }
+
+  .spinner-warning {
+    border-color: var(--gray-700);
+    border-right-color: #fbbf24;
+  }
+
+  .spinner-danger {
+    border-color: var(--gray-700);
+    border-right-color: #f87171;
+  }
+}
+
+/* ================ RESPONSIVE ================ */
+
+@media (max-width: 767px) {
+  .spinner-lg {
+    width: 48px;
+    height: 48px;
+    border-width: 3px;
+  }
+
+  .spinner-md {
+    width: 32px;
+    height: 32px;
+    border-width: 2px;
+  }
+
+  .card-skeleton {
+    padding: var(--space-md);
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "frontend_frameworks": [
+    "React - Component-based UI library using JSX and virtual DOM for efficient updates, steep learning curve but powerful",
+    "Vue - Progressive framework balancing simplicity and power, gentle learning curve with single-file components",
+    "Angular - Full-featured framework with strong typing and dependency injection, complex but enterprise-ready",
+    "Svelte - Compiler-based framework shipping less JavaScript, reactive variables without virtual DOM overhead",
+    "Next.js - React meta-framework with server-side rendering, static generation, and API routes"
+  ],
+  "backend_frameworks": [
+    "Django - Python framework with batteries included, ORM, admin panel, ideal for rapid development",
+    "Flask - Lightweight Python framework, minimal but flexible, good for learning and microservices",
+    "Spring Boot - Java framework for scalable applications, auto-configuration, embedded server",
+    "Express - Node.js framework, minimal and flexible, perfect for REST APIs and real-time applications",
+    "FastAPI - Modern Python framework with automatic documentation, type validation, very fast"
+  ],
+  "database_patterns": [
+    "ORM (Object-Relational Mapping) - Maps database tables to code objects, reduces SQL boilerplate",
+    "Migrations - Version control for database schema, track changes and enable reproducible deployments",
+    "Query Optimization - Use indexes, join strategies, avoid N+1 queries for database performance",
+    "Connection Pooling - Reuse database connections for efficiency, reduces overhead of opening/closing",
+    "Data Normalization - Organize data to reduce duplication and maintain consistency"
+  ],
+  "api_patterns": [
+    "REST - Representational state transfer using HTTP methods on resources, stateless and cacheable",
+    "GraphQL - Query language for APIs, fetch exactly what you need, reduces over-fetching",
+    "JSON-RPC - Remote procedure call using JSON, simpler than REST for function-like APIs",
+    "WebSocket - Two-way communication for real-time applications, persistent connection",
+    "gRPC - High-performance RPC using Protocol Buffers, great for internal services"
+  ],
+  "architectural_patterns": [
+    "MVC (Model-View-Controller) - Separate data, presentation, and logic for maintainability",
+    "Microservices - Build applications as small independent services, scalable but complex",
+    "Serverless - Functions as a service without managing servers, pay per execution",
+    "Event-Driven - Systems react to events through asynchronous communication, loosely coupled",
+    "CQRS - Command-Query Responsibility Segregation, separate read and write operations"
+  ]
+}

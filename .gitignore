@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+venv/
+.env
+*.db
+*.log
+node_modules/
+frontend/dist/
+frontend/.vite/
+.claude/
+backend/compilers/python/
+backend/compilers/java/
+backend/compilers/go/
+backend/compilers/gcc/

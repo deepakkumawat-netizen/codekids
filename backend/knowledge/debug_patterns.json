@@ -1,0 +1,37 @@
+{
+  "common_errors": [
+    "Off-by-one errors in loops - Confusing array indices (0-based vs 1-based) causes iteration issues, use len(array) not len(array)-1",
+    "Uninitialized variables - Using variables before assignment causes undefined behavior, initialize all variables",
+    "Type mismatch - Operations on incompatible types like adding string to number, check types with type() function",
+    "Null pointer exceptions - Accessing properties of null/None objects crashes code, always check before access",
+    "Infinite loops - Missing loop termination condition causes program to hang, verify loop condition will eventually be false"
+  ],
+  "logical_errors": [
+    "Wrong conditional logic - Using 'or' instead of 'and' or vice versa inverts intended behavior, trace through conditions",
+    "Mutation during iteration - Modifying collections while iterating causes skipped elements, iterate over copy instead",
+    "Floating point precision - Comparing floats with == fails due to precision loss, use epsilon comparison instead",
+    "String comparison - Using == for string identity instead of value causes false negatives, use .equals() method",
+    "Off-by-one in ranges - Range(5) goes 0-4 not 1-5, be careful with inclusive/exclusive boundaries"
+  ],
+  "debugging_techniques": [
+    "Print debugging - Add print statements showing variable values at key points to track execution flow",
+    "Breakpoints - Pause execution at specific lines to inspect state without restarting constantly",
+    "Binary search debugging - Comment out half the code to narrow down where bug occurs quickly",
+    "Rubber duck debugging - Explain code line-by-line to someone (or imaginary duck), often reveals the issue",
+    "Version control - Use git bisect to find exactly which commit introduced the bug"
+  ],
+  "prevention_strategies": [
+    "Use assertions - Add assertions to verify assumptions and fail fast when assumptions are violated",
+    "Defensive programming - Check preconditions and postconditions explicitly in code",
+    "Code review - Have others examine code before merging to catch errors early",
+    "Automated testing - Write tests that automatically verify behavior, preventing regressions",
+    "Type hints - Use static typing or type annotations to catch type errors before runtime"
+  ],
+  "error_messages": [
+    "IndexError: list index out of range - Array access with invalid index, check bounds before accessing",
+    "NameError: name 'x' is not defined - Using variable before defining it, check spelling and definition order",
+    "TypeError: unsupported operand type - Operating on incompatible types, check variable types",
+    "KeyError: 'key' - Accessing non-existent dictionary key, check if key exists with 'in' operator first",
+    "RecursionError: maximum recursion depth - Infinite recursion from missing base case, add proper termination condition"
+  ]
+}

@@ -1,0 +1,555 @@
+/**
+ * CodeLabPage Styles - Modern LeetCode-Inspired Design
+ * Professional code editor with split layout and AI integration
+ */
+
+.codelab-page {
+  min-height: 100vh;
+  background: #fafbfc;
+  display: flex;
+  flex-direction: column;
+  color: #0f172a;
+}
+
+.codelab-container {
+  flex: 1;
+  padding: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* TOP BAR - Language & Grade Selection */
+/* ═══════════════════════════════════════════════════════════ */
+
+.codelab-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 20px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.codelab-top-bar:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.top-bar-left,
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.top-bar-left select {
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: white;
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.top-bar-left select:hover {
+  border-color: #399aff;
+  box-shadow: 0 0 0 2px rgba(57, 154, 255, 0.1);
+}
+
+.top-bar-left select:focus {
+  outline: none;
+  border-color: #399aff;
+  box-shadow: 0 0 0 3px rgba(57, 154, 255, 0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* EDITOR AREA - Split Layout */
+/* ═══════════════════════════════════════════════════════════ */
+
+.codelab-editor-area {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 20px;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* CODE EDITOR SECTION */
+/* ═══════════════════════════════════════════════════════════ */
+
+.code-editor-section {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.code-editor-section:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.editor-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+.code-textarea {
+  flex: 1;
+  padding: 16px;
+  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #0f172a;
+  background: white;
+  border: none;
+  outline: none;
+  resize: none;
+  overflow-y: auto;
+  tab-size: 2;
+  -moz-tab-size: 2;
+  transition: background-color 0.2s ease;
+}
+
+.code-textarea:focus {
+  background: #fafbfc;
+}
+
+.code-textarea::selection {
+  background: rgba(57, 154, 255, 0.25);
+}
+
+.code-textarea::placeholder {
+  color: #94a3b8;
+}
+
+.editor-actions {
+  padding: 12px 16px;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: flex;
+  gap: 10px;
+}
+
+.editor-actions button {
+  flex: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* RIGHT PANEL - Output & AI Help */
+/* ═══════════════════════════════════════════════════════════ */
+
+.codelab-right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.codelab-right-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.codelab-right-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.codelab-right-panel::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.codelab-right-panel::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.output-section,
+.rag-buttons-section,
+.rag-result-section {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.output-section:hover,
+.rag-buttons-section:hover,
+.rag-result-section:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.section-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* OUTPUT CONSOLE */
+/* ═══════════════════════════════════════════════════════════ */
+
+.output-console {
+  padding: 14px 16px;
+  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #475569;
+  background: white;
+  margin: 0;
+  overflow: auto;
+  max-height: 180px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.output-console::-webkit-scrollbar {
+  width: 6px;
+}
+
+.output-console::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.output-console::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.output-console::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* RAG BUTTONS SECTION */
+/* ═══════════════════════════════════════════════════════════ */
+
+.rag-buttons-section {
+  padding: 12px 16px 16px;
+}
+
+.rag-buttons-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.rag-buttons-grid button {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 10px 8px;
+  transition: all 0.2s ease;
+  border-radius: 6px;
+}
+
+.rag-buttons-grid button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rag-buttons-grid button:active {
+  transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* RAG LOADING STATE */
+/* ═══════════════════════════════════════════════════════════ */
+
+.rag-loading {
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(57, 154, 255, 0.06);
+  border-radius: 6px;
+  text-align: center;
+  margin: 10px 16px 16px;
+}
+
+.rag-loading p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* RAG RESULTS SECTION */
+/* ═══════════════════════════════════════════════════════════ */
+
+.rag-result-section {
+  flex: 1;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+}
+
+.rag-result-content {
+  padding: 14px 16px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #0f172a;
+  overflow-y: auto;
+  flex: 1;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.rag-result-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.rag-result-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.rag-result-content::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.rag-result-content::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.rag-result-content strong {
+  color: #399aff;
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* TIPS SECTION */
+/* ═══════════════════════════════════════════════════════════ */
+
+.codelab-tips {
+  padding: 12px 16px;
+  background: rgba(57, 154, 255, 0.08);
+  border: 1px solid rgba(57, 154, 255, 0.2);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.tips-text {
+  font-size: 13px;
+  color: #475569;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* DARK MODE */
+/* ═══════════════════════════════════════════════════════════ */
+
+@media (prefers-color-scheme: dark) {
+  .codelab-page {
+    background: #0f172a;
+    color: #f8fafc;
+  }
+
+  .codelab-top-bar {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  .top-bar-left select {
+    background: #334155;
+    color: #f8fafc;
+    border-color: #475569;
+  }
+
+  .top-bar-left select:hover {
+    border-color: #399aff;
+    box-shadow: 0 0 0 2px rgba(57, 154, 255, 0.2);
+  }
+
+  .code-editor-section {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  .editor-header {
+    background: #334155;
+    border-bottom-color: #475569;
+  }
+
+  .editor-title {
+    color: #f8fafc;
+  }
+
+  .code-textarea {
+    background: #1e293b;
+    color: #e2e8f0;
+  }
+
+  .code-textarea:focus {
+    background: #334155;
+  }
+
+  .code-textarea::placeholder {
+    color: #64748b;
+  }
+
+  .editor-actions {
+    background: #334155;
+    border-top-color: #475569;
+  }
+
+  .output-section,
+  .rag-buttons-section,
+  .rag-result-section {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  .section-header {
+    background: #334155;
+    border-bottom-color: #475569;
+  }
+
+  .section-title {
+    color: #f8fafc;
+  }
+
+  .output-console {
+    background: #1e293b;
+    color: #cbd5e1;
+  }
+
+  .rag-result-content {
+    color: #e2e8f0;
+  }
+
+  .rag-result-content strong {
+    color: #60a5fa;
+  }
+
+  .rag-loading {
+    background: rgba(57, 154, 255, 0.08);
+  }
+
+  .rag-loading p {
+    color: #cbd5e1;
+  }
+
+  .codelab-tips {
+    background: rgba(57, 154, 255, 0.08);
+    border-color: rgba(57, 154, 255, 0.2);
+  }
+
+  .tips-text {
+    color: #cbd5e1;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* RESPONSIVE DESIGN */
+/* ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 1280px) {
+  .codelab-editor-area {
+    grid-template-columns: 1fr;
+  }
+
+  .codelab-right-panel {
+    max-height: 350px;
+  }
+
+  .rag-buttons-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .codelab-container {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .codelab-top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .codelab-editor-area {
+    gap: 16px;
+  }
+
+  .rag-buttons-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .codelab-container {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .codelab-editor-area {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .codelab-right-panel {
+    max-height: 300px;
+  }
+
+  .code-textarea {
+    font-size: 13px;
+    padding: 12px;
+  }
+
+  .output-console {
+    font-size: 11px;
+    padding: 12px;
+  }
+
+  .rag-result-content {
+    font-size: 12px;
+    padding: 12px;
+  }
+
+  .rag-buttons-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
