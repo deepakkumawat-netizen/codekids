@@ -1,18 +1,9 @@
 services:
   - type: web
     name: codekids
-    env: python
+    env: docker
     region: oregon
     plan: free
-
-    buildCommand: |
-      apt-get install -y -q default-jdk 2>/dev/null || true && pip install -r backend/requirements.txt && cd frontend && npm install && npm run build
-
-    startCommand: |
-      cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
-
     envVars:
       - key: OPENAI_API_KEY
         sync: false
-      - key: PYTHON_VERSION
-        value: "3.11.0"
