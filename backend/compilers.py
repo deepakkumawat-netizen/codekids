@@ -17,7 +17,7 @@ def _run(cmd, timeout=10, cwd=None, env=None):
         )
         return {"stdout": result.stdout, "stderr": result.stderr, "exit_code": result.returncode}
     except subprocess.TimeoutExpired:
-        return {"stdout": "", "stderr": "Execution timed out (10s limit).", "exit_code": 1}
+        return {"stdout": "", "stderr": f"Execution timed out ({timeout}s limit).", "exit_code": 1}
     except FileNotFoundError as e:
         return {"stdout": "", "stderr": f"Compiler not found: {e}", "exit_code": 1}
     except Exception as e:
@@ -123,11 +123,23 @@ def execute_go(code: str) -> dict:
 
     with tempfile.TemporaryDirectory() as tmpdir:
         go_file = os.path.join(tmpdir, "main.go")
+        exe_file = os.path.join(tmpdir, "main")
+        cache_dir = os.path.join(tmpdir, "gocache")
+        os.makedirs(cache_dir, exist_ok=True)
+
         with open(go_file, "w") as f:
             f.write(code)
+
         env = os.environ.copy()
-        env["GOCACHE"] = os.path.join(tmpdir, "cache")
-        return _run([go, "run", go_file], cwd=tmpdir, env=env, timeout=30)
+        env["GOCACHE"] = cache_dir
+        env["GOPATH"] = os.path.join(tmpdir, "gopath")
+
+        # Build first, then run (faster than go run on slow CPUs)
+        build_res = _run([go, "build", "-o", exe_file, go_file], cwd=tmpdir, env=env, timeout=60)
+        if build_res["exit_code"] != 0:
+            return build_res
+
+        return _run([exe_file], cwd=tmpdir, timeout=15)
 
 
 def execute_code_local(code: str, language: str) -> dict:
