@@ -82,28 +82,7 @@ def execute_java(code: str) -> dict:
 def execute_cpp(code: str) -> dict:
     gpp = shutil.which("g++")
     if not gpp:
-        # Try Rextester online fallback
-        try:
-            import urllib.request, urllib.parse, json as _json
-            data = urllib.parse.urlencode({
-                "LanguageChoiceEnum": "6",
-                "Program": code,
-                "Input": "",
-                "CompilerArgs": "-std=c++17 -o a.out",
-            }).encode("utf-8")
-            req = urllib.request.Request(
-                "https://rextester.com/rundotnet/api",
-                data=data,
-                headers={"Content-Type": "application/x-www-form-urlencoded"},
-                method="POST"
-            )
-            with urllib.request.urlopen(req, timeout=20) as resp:
-                result = _json.loads(resp.read().decode())
-            stdout = result.get("Result", "")
-            stderr = result.get("Errors", "") or ""
-            return {"stdout": stdout, "stderr": stderr, "exit_code": 0 if not stderr else 1}
-        except Exception as e:
-            return {"stdout": "", "stderr": f"C++ not available: {str(e)}", "exit_code": 1}
+        return {"stdout": "", "stderr": "C++ compiler not found on this server. Try Python instead!", "exit_code": 1}
 
     with tempfile.TemporaryDirectory() as tmpdir:
         src = os.path.join(tmpdir, "code.cpp")
