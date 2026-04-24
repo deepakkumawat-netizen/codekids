@@ -42,7 +42,32 @@ export default function App() {
     return newId
   })
   const [showHistory, setShowHistory] = useState(false)
+  const [usageRefresh, setUsageRefresh] = useState(0)
   const { theme, toggleTheme } = useContext(ThemeContext)
+
+  const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:7000'
+    : window.location.origin
+
+  const saveAndTrack = async (toolName, codeText, response, lang) => {
+    try {
+      await Promise.all([
+        fetch(`${apiUrl}/api/save-chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: userId, tool_name: toolName, code: codeText, response, language: lang })
+        }),
+        fetch(`${apiUrl}/api/increment-usage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: userId, tool_name: toolName })
+        })
+      ])
+      setUsageRefresh(n => n + 1)
+    } catch (e) {
+      console.error('Failed to track usage:', e)
+    }
+  }
   const textareaRef = useRef(null)
   const lineNumbersRef = useRef(null)
 
@@ -172,11 +197,10 @@ export default function App() {
       })
       const data = await res.json()
 
-      // If full explanation is returned, use it
+      let resultText = ''
       if (data.explanation) {
-        setAiResult(data.explanation)
+        resultText = data.explanation
       } else {
-        // Otherwise compile structured fields
         const parts = []
         if (data.definition && data.definition.length > 100)  parts.push(data.definition)
         if (data.keyPoints?.length) parts.push('Key Points:\n' + data.keyPoints.join('\n'))
@@ -186,8 +210,10 @@ export default function App() {
         if (data.guiding_questions?.length) parts.push('Questions to think about:\n' + data.guiding_questions.join('\n'))
         if (data.hint)        parts.push(`Hint: ${data.hint}`)
         const flat = data.solution || data.response || data.message
-        setAiResult(parts.length ? parts.join('\n\n') : flat || 'No response')
+        resultText = parts.length ? parts.join('\n\n') : flat || 'No response'
       }
+      setAiResult(resultText)
+      saveAndTrack(action.id, code, resultText, language.value)
     } catch (err) {
       setAiResult(`Error: ${err.message}`)
     } finally {
@@ -208,7 +234,9 @@ export default function App() {
       })
       const data = await res.json()
       setSearchResults(data)
-      setAiResult(data.results.map(r => `${r.topic}: ${r.definition}`).join('\n\n'))
+      const resultText = data.results.map(r => `${r.topic}: ${r.definition}`).join('\n\n')
+      setAiResult(resultText)
+      saveAndTrack('analyze', searchQuery, resultText, language.value)
     } catch (err) {
       setAiResult(`Search error: ${err.message}`)
     } finally {
@@ -273,7 +301,7 @@ export default function App() {
           </button>
 
           <div style={{ marginLeft: '12px' }}>
-            <UsageCounter userId={userId} toolName="codekids" apiUrl={window.location.hostname === 'localhost' ? 'http://localhost:7000' : window.location.origin} />
+            <UsageCounter userId={userId} toolName="codekids" apiUrl={apiUrl} refreshKey={usageRefresh} />
           </div>
 
           <button
@@ -496,7 +524,7 @@ export default function App() {
           )}
         </div>
       </div>
-      <ChatHistory userId={userId} toolName="codekids" isOpen={showHistory} onClose={() => setShowHistory(false)} apiUrl={window.location.hostname === 'localhost' ? 'http://localhost:7000' : window.location.origin} />
+      <ChatHistory userId={userId} toolName="codekids" isOpen={showHistory} onClose={() => setShowHistory(false)} apiUrl={apiUrl} />
     </div>
   )
 }

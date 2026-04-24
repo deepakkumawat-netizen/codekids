@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const UsageCounter = ({ userId, toolName, apiUrl = "http://localhost:7000" }) => {
+const UsageCounter = ({ userId, toolName, apiUrl = "http://localhost:7000", refreshKey = 0 }) => {
   const [usage, setUsage] = useState({ usage_count: 0, limit: 50, remaining: 50, exceeded: false });
   const [loading, setLoading] = useState(false);
 
@@ -28,7 +28,7 @@ const UsageCounter = ({ userId, toolName, apiUrl = "http://localhost:7000" }) =>
 
   useEffect(() => {
     fetchUsage();
-  }, [userId, toolName]);
+  }, [userId, toolName, refreshKey]);
 
   const color = usage.exceeded ? '#ef4444' : usage.usage_count >= 40 ? '#f59e0b' : '#10b981';
 
