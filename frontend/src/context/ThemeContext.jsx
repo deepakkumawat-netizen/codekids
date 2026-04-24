@@ -35,6 +35,7 @@ export const ThemeProvider = ({ children }) => {
 
   const applyTheme = (themeMode) => {
     const root = document.documentElement;
+    root.classList.add('no-transitions');
     if (themeMode === 'dark') {
       root.style.colorScheme = 'dark';
       root.classList.add('dark-mode');
@@ -42,6 +43,7 @@ export const ThemeProvider = ({ children }) => {
       root.style.colorScheme = 'light';
       root.classList.remove('dark-mode');
     }
+    requestAnimationFrame(() => root.classList.remove('no-transitions'));
   };
 
   return (
