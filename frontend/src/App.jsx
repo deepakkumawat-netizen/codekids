@@ -43,6 +43,7 @@ export default function App() {
   })
   const [showHistory, setShowHistory] = useState(false)
   const [usageRefresh, setUsageRefresh] = useState(0)
+  const [chatHistory, setChatHistory] = useState([])
   const { theme, toggleTheme } = useContext(ThemeContext)
 
   const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
@@ -143,6 +144,7 @@ export default function App() {
     setAiResult('')
     setAiMode(null)
     setOutputError(false)
+    setChatHistory([])
   }
 
   const handleRun = async () => {
@@ -193,7 +195,7 @@ export default function App() {
       const res = await fetch(action.endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code, language: language.value, grade_level: grade }),
+        body: JSON.stringify({ code, language: language.value, grade_level: grade, history: chatHistory }),
       })
       const data = await res.json()
 
@@ -213,6 +215,11 @@ export default function App() {
         resultText = parts.length ? parts.join('\n\n') : flat || 'No response'
       }
       setAiResult(resultText)
+      setChatHistory(prev => [
+        ...prev,
+        { role: 'user', content: `[${action.label}] ${language.value} code:\n\`\`\`\n${code.slice(0, 400)}\n\`\`\`` },
+        { role: 'assistant', content: resultText.slice(0, 800) }
+      ])
       saveAndTrack(action.id, code, resultText, language.value)
     } catch (err) {
       setAiResult(`Error: ${err.message}`)

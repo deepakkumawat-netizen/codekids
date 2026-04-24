@@ -47,12 +47,14 @@ class ExplainRequest(BaseModel):
     language: str
     grade_level: str
     question: Optional[str] = ""
+    history: list = []
 
 class DebugRequest(BaseModel):
     code: str
     language: str
     grade_level: str
     error: Optional[str] = ""
+    history: list = []
 
 class HintRequest(BaseModel):
     code: str
@@ -106,14 +108,20 @@ def execute_code(code: str, language: str) -> dict:
     """Execute code using bundled local compilers - completely offline, no Piston API"""
     return execute_code_local(code, language)
 
-def call_ai(prompt: str) -> str:
-    """Call OpenAI to generate an AI response"""
+def call_ai(user_prompt: str, history: list = None, system: str = None) -> str:
+    """Call OpenAI with optional system prompt and conversation history"""
+    messages = []
+    if system:
+        messages.append({"role": "system", "content": system})
+    if history:
+        messages.extend(history[-6:])  # keep last 3 exchanges to avoid token overflow
+    messages.append({"role": "user", "content": user_prompt})
     try:
         from openai import OpenAI
         client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         response = client.chat.completions.create(
             model="gpt-4o-mini",
-            messages=[{"role": "user", "content": prompt}],
+            messages=messages,
             max_tokens=2000,
             temperature=0.7,
         )
@@ -190,27 +198,24 @@ async def explain_code_ai(request: dict):
 async def explain_code(request: ExplainRequest):
     """Explain code like a teacher with detailed, grade-appropriate explanations"""
     tone = get_grade_tone(request.grade_level)
-    prompt = f"""You are an expert teacher explaining {request.language} code to {request.grade_level} students.
-{tone}
-
-Code to explain:
+    system = f"You are an expert, encouraging teacher explaining {request.language} code to Grade {request.grade_level} students. {tone} Remember what the student asked before and build on it."
+    user_prompt = f"""Explain this {request.language} code:
 ```{request.language}
 {request.code}
 ```
 
-Provide a DETAILED, EDUCATIONAL explanation as a teacher would:
+Provide a DETAILED, EDUCATIONAL explanation:
+1. WHAT DOES IT DO? — Simple sentence first, then expand
+2. HOW DOES IT WORK? — Step-by-step breakdown of each line
+3. WHY IS THIS IMPORTANT? — Real-world applications
+4. KEY CONCEPTS — Programming concepts used
+5. COMMON MISTAKES — What students often misunderstand
+6. PRACTICE TIP — How to remember or practice this
+7. RELATED TOPICS — What to learn next
 
-1. WHAT DOES IT DO?: Start with a simple sentence, then expand with context
-2. HOW DOES IT WORK?: Step-by-step breakdown of each line/concept
-3. WHY IS THIS IMPORTANT?: Real-world applications and learning value
-4. KEY CONCEPTS: List important programming concepts used
-5. COMMON MISTAKES: What students often misunderstand
-6. PRACTICE TIP: How to remember or practice this concept
-7. RELATED TOPICS: What to learn next
+Use analogies and real-world examples. Be engaging and clear."""
 
-Use analogies and real-world examples. Make it engaging and clear."""
-
-    response = call_ai(prompt)
+    response = call_ai(user_prompt, history=request.history, system=system)
     explanation = parse_explain_response(response)
     return explanation
 
@@ -277,29 +282,24 @@ async def debug_code(request: DebugRequest):
     tone = get_grade_tone(request.grade_level)
     code_with_lines = '\n'.join([f"{i+1}: {line}" for i, line in enumerate(request.code.split('\n'))])
 
-    prompt = f"""Help {request.grade_level} student debug their {request.language} code. NEVER give complete code solutions.
+    system = f"You are a patient debugging tutor for Grade {request.grade_level} students learning {request.language}. {tone} Never give the complete fixed code — guide students to find the fix themselves. Remember prior context from this session."
+    user_prompt = f"""Help debug this {request.language} code. DO NOT give the complete solution.
 
 Code with line numbers:
 ```{request.language}
 {code_with_lines}
 ```
+Error: {request.error or 'Code not working as expected'}
 
-Error Message: {request.error or 'Code not working as expected'}
+Guide the student using:
+1. ERROR LOCATION — Which line has the problem and why
+2. WHY IS THIS AN ERROR? — What went wrong
+3. GUIDING QUESTIONS — 2-3 questions to help them think through the fix
+4. HINTS — Small clues without giving the answer
+5. WHAT TO TRY — Steps to fix it themselves
+6. LEARNING POINT — What concept to review"""
 
-{tone}
-
-IMPORTANT: DO NOT provide the complete fixed code. Instead:
-
-1. ERROR LOCATION: Which line number has the problem (e.g., "Line 3: The variable is not defined")
-2. WHY IS THIS AN ERROR?: Explain what went wrong and why Python/Java/etc. doesn't like it
-3. GUIDING QUESTIONS: Ask 2-3 questions to help them think through the fix
-4. HINTS: Give small hints about the fix without giving the solution
-5. WHAT TO TRY: Describe the steps they should take to fix it themselves
-6. LEARNING POINT: What concept did they misunderstand?
-
-Teach them to debug, don't do it for them."""
-
-    response = call_ai(prompt)
+    response = call_ai(user_prompt, history=request.history, system=system)
     debug_response = parse_debug_response(response)
     return debug_response
 
@@ -562,41 +562,25 @@ async def ai_practice_advanced(request: dict):
 async def improve_code(request: ExplainRequest):
     """Suggest code improvements using language best practices"""
     tone = get_grade_tone(request.grade_level)
-    prompt = f"""You are a professional code reviewer for {request.grade_level} students learning {request.language}.
-
-Code to review:
+    system = f"You are an encouraging professional code reviewer for Grade {request.grade_level} students learning {request.language}. {tone} Focus on learning, not criticism. Build on any previous suggestions in this session."
+    user_prompt = f"""Review and suggest improvements for this {request.language} code:
 ```{request.language}
 {request.code}
 ```
 
-{tone}
+Provide specific, practical suggestions:
 
-Provide specific improvement suggestions in this format:
+**1. CODE STYLE AND FORMATTING** — How to write cleaner, more readable code
+**2. BEST PRACTICES FOR {request.language.upper()}** — Professional practices specific to {request.language}
+**3. EFFICIENCY** — How to make it run faster or use less memory
+**4. BETTER NAMING** — Clearer variable/function names
+**5. CODE STRUCTURE** — How to organize it better
+**6. PROFESSIONAL TECHNIQUE** — One advanced {request.language} concept to try
+**7. BEFORE AND AFTER** — Show ONE small improvement with original vs improved code
 
-**1. CODE STYLE AND FORMATTING**
-[Explain how to write cleaner, more readable code]
+Be specific and encouraging."""
 
-**2. BEST PRACTICES FOR {request.language.upper()}**
-[Share professional programming practices specific to {request.language}]
-
-**3. EFFICIENCY AND PERFORMANCE**
-[Suggest how to make code run faster or use less memory]
-
-**4. BETTER NAMING CONVENTIONS**
-[Recommend better variable/function names for clarity]
-
-**5. CODE STRUCTURE**
-[How to organize and structure the code better]
-
-**6. PROFESSIONAL TECHNIQUES**
-[Advanced {request.language} concepts appropriate for their grade]
-
-**7. BEFORE AND AFTER EXAMPLE**
-Show ONE small improvement with original and improved code.
-
-Keep suggestions practical and encouraging. Focus on learning, not criticism."""
-
-    response = call_ai(prompt)
+    response = call_ai(user_prompt, history=request.history, system=system)
     improvement = parse_explain_response(response)
     return improvement
 

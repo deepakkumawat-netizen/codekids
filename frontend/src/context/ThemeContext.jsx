@@ -43,7 +43,9 @@ export const ThemeProvider = ({ children }) => {
       root.style.colorScheme = 'light';
       root.classList.remove('dark-mode');
     }
-    requestAnimationFrame(() => root.classList.remove('no-transitions'));
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => root.classList.remove('no-transitions'));
+    });
   };
 
   return (
