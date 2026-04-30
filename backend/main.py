@@ -118,9 +118,11 @@ def call_ai(user_prompt: str, history: list = None, system: str = None) -> str:
     messages.append({"role": "user", "content": user_prompt})
     try:
         from openai import OpenAI
-        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        _base = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+        _model = os.getenv("OLLAMA_MODEL", "llama3.2:3b")
+        client = OpenAI(base_url=_base, api_key="ollama")
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model=_model,
             messages=messages,
             max_tokens=2000,
             temperature=0.7,
