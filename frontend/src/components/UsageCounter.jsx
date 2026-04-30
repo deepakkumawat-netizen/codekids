@@ -1,36 +1,19 @@
 import React, { useState, useEffect } from 'react';
 
-const UsageCounter = ({ userId, toolName, apiUrl = "http://localhost:7000", refreshKey = 0 }) => {
-  const [usage, setUsage] = useState({ usage_count: 0, limit: 50, remaining: 50, exceeded: false });
-  const [loading, setLoading] = useState(false);
+const LIMIT = 50;
+const KEY = (userId, toolName) => `usage_${toolName}_${userId}_${new Date().toLocaleDateString()}`;
 
-  const fetchUsage = async () => {
-    if (!userId || !toolName) return;
-
-    try {
-      setLoading(true);
-      const response = await fetch(`${apiUrl}/api/check-usage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: userId, tool_name: toolName })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUsage(data);
-      }
-    } catch (error) {
-      console.error('Error fetching usage:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+const UsageCounter = ({ userId, toolName, refreshKey = 0 }) => {
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
-    fetchUsage();
+    if (!userId || !toolName) return;
+    const stored = parseInt(localStorage.getItem(KEY(userId, toolName)) || '0', 10);
+    setCount(stored);
   }, [userId, toolName, refreshKey]);
 
-  const color = usage.exceeded ? '#ef4444' : usage.usage_count >= 40 ? '#f59e0b' : '#10b981';
+  const exceeded = count >= LIMIT;
+  const color = exceeded ? '#ef4444' : count >= 40 ? '#f59e0b' : '#10b981';
 
   return (
     <div style={{
@@ -45,9 +28,20 @@ const UsageCounter = ({ userId, toolName, apiUrl = "http://localhost:7000", refr
       textAlign: 'center',
       transition: 'all 0.2s'
     }}>
-      {usage.usage_count}/{usage.limit}
+      {count}/{LIMIT}
     </div>
   );
+};
+
+export const incrementUsage = (userId, toolName) => {
+  const key = `usage_${toolName}_${userId}_${new Date().toLocaleDateString()}`;
+  const current = parseInt(localStorage.getItem(key) || '0', 10);
+  localStorage.setItem(key, current + 1);
+};
+
+export const checkUsageExceeded = (userId, toolName) => {
+  const key = `usage_${toolName}_${userId}_${new Date().toLocaleDateString()}`;
+  return parseInt(localStorage.getItem(key) || '0', 10) >= LIMIT;
 };
 
 export default UsageCounter;

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useContext } from 'react'
 import './index.css'
-import UsageCounter from './components/UsageCounter'
-import ChatHistory from './components/ChatHistory'
+import UsageCounter, { incrementUsage, checkUsageExceeded } from './components/UsageCounter'
+import ChatHistory, { saveChatToHistory } from './components/ChatHistory'
 import { ThemeContext } from './context/ThemeContext'
 
 const LANGUAGES = [
@@ -254,6 +254,7 @@ export default function App() {
   const [showHistory, setShowHistory] = useState(false)
   const [usageRefresh, setUsageRefresh] = useState(0)
   const [chatHistory, setChatHistory] = useState([])
+
   const { theme, toggleTheme } = useContext(ThemeContext)
 
   const [gami, setGami] = useState(() => loadGami())
@@ -265,28 +266,11 @@ export default function App() {
     if (earned.length) setNewBadges(earned)
   }
 
-  const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:7000'
-    : window.location.origin
-
-  const saveAndTrack = async (toolName, codeText, response, lang) => {
-    try {
-      await Promise.all([
-        fetch(`${apiUrl}/api/save-chat`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ user_id: userId, tool_name: toolName, code: codeText, response, language: lang })
-        }),
-        fetch(`${apiUrl}/api/increment-usage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ user_id: userId, tool_name: toolName })
-        })
-      ])
-      setUsageRefresh(n => n + 1)
-    } catch (e) {
-      console.error('Failed to track usage:', e)
-    }
+  const saveAndTrack = (toolId, codeText, response, lang) => {
+    const toolLabel = AI_ACTIONS.find(a => a.id === toolId)?.label || toolId
+    saveChatToHistory(userId, 'codekids', toolLabel, codeText, response, lang)
+    incrementUsage(userId, 'codekids')
+    setUsageRefresh(n => n + 1)
   }
   const textareaRef = useRef(null)
   const lineNumbersRef = useRef(null)
@@ -572,7 +556,7 @@ export default function App() {
           </button>
 
           <div style={{ marginLeft: '12px' }}>
-            <UsageCounter userId={userId} toolName="codekids" apiUrl={apiUrl} refreshKey={usageRefresh} />
+            <UsageCounter userId={userId} toolName="codekids" refreshKey={usageRefresh} />
           </div>
 
           <button
@@ -821,7 +805,7 @@ export default function App() {
           )}
         </div>
       </div>
-      <ChatHistory userId={userId} toolName="codekids" isOpen={showHistory} onClose={() => setShowHistory(false)} apiUrl={apiUrl} />
+      <ChatHistory userId={userId} toolName="codekids" isOpen={showHistory} onClose={() => setShowHistory(false)} />
       {newBadges.length > 0 && <BadgeToast badges={newBadges} onDone={() => setNewBadges([])} />}
     </div>
   )
