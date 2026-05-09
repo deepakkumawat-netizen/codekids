@@ -118,9 +118,9 @@ def call_ai(user_prompt: str, history: list = None, system: str = None) -> str:
     messages.append({"role": "user", "content": user_prompt})
     try:
         from openai import OpenAI
-        client = OpenAI(api_key=os.getenv("GROQ_API_KEY"), base_url="https://api.groq.com/openai/v1")
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         response = client.chat.completions.create(
-            model=os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
+            model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
             messages=messages,
             max_tokens=2000,
             temperature=0.7,
