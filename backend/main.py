@@ -169,6 +169,9 @@ async def run_code(request: RunCodeRequest):
         or "not yet bundled" in stderr.lower()
         or "not available in the cloud" in stderr
         or "compiler not found" in stderr.lower()
+        or "ModuleNotFoundError" in stderr
+        or "ImportError" in stderr
+        or "No module named" in stderr
     )
 
     if needs_sim:
