@@ -159,15 +159,30 @@ async def health():
 
 @app.post("/api/run")
 async def run_code(request: RunCodeRequest):
-    """Execute code - if compiler unavailable, offer AI help instead"""
+    """Execute code - fallback to AI simulation when compiler unavailable or stdin required"""
     result = execute_code(request.code, request.language)
 
-    # If compiler not available, suggest AI tools
-    if "not yet bundled" in result.get("stderr", "").lower():
+    stderr = result.get("stderr", "")
+    needs_sim = (
+        "not found on this server" in stderr
+        or "Scanner for user input" in stderr
+        or "not yet bundled" in stderr.lower()
+        or "not available in the cloud" in stderr
+        or "compiler not found" in stderr.lower()
+    )
+
+    if needs_sim:
+        sim = call_ai(
+            f"Simulate executing this {request.language} code. Output ONLY what the program would print. "
+            f"For any Scanner/input()/readline calls, use these sample values: name='Alex', number=42, word='hello', age=15. "
+            f"No explanations, no markdown, just the raw program output.\n\n"
+            f"```{request.language}\n{request.code}\n```"
+        )
         return {
-            "stdout": "",
-            "stderr": f"💡 Compiler for {request.language} not available.\n\nUse AI Tools instead:\n• Explain: Understand the code\n• Debug: Get help fixing errors\n• Hint: Learn concepts\n• Practice: Get problems to solve",
-            "exit_code": 1
+            "stdout": f"[AI Simulated — {request.language}]\n{sim}",
+            "stderr": "",
+            "exit_code": 0,
+            "simulated": True,
         }
 
     return result
@@ -557,6 +572,42 @@ async def ai_practice_advanced(request: dict):
 
     result = {"error": "Feature disabled", "status": "disabled"}
     return result
+
+class HintsRequest(BaseModel):
+    code: str
+    language: str
+    grade_level: str
+
+@app.post("/api/hints")
+async def get_hints(request: HintsRequest):
+    """Return 3 progressive hints for the student's current code"""
+    import json, re
+    tone = get_grade_tone(request.grade_level)
+    prompt = (
+        f"You are a patient coding teacher for Grade {request.grade_level} students. {tone}\n\n"
+        f"Look at this {request.language} code and write 3 progressive hints to help the student.\n\n"
+        f"```{request.language}\n{request.code}\n```\n\n"
+        "Rules:\n"
+        "- Hint 1: Very gentle — only a general direction, no specifics.\n"
+        "- Hint 2: More specific — point to the key concept or the area to look at.\n"
+        "- Hint 3: Most detailed — nearly full guidance, but let the student take the last step.\n\n"
+        "Respond ONLY with this exact JSON (no markdown, no extra text):\n"
+        '{"hint1":"...","hint2":"...","hint3":"..."}'
+    )
+    response = call_ai(prompt)
+    try:
+        match = re.search(r'\{.*\}', response, re.DOTALL)
+        if match:
+            return json.loads(match.group())
+    except Exception:
+        pass
+    lines = [l.strip() for l in response.split('\n') if l.strip()]
+    return {
+        "hint1": lines[0] if len(lines) > 0 else "Think about what your code is trying to do step by step.",
+        "hint2": lines[1] if len(lines) > 1 else "Look closely at each line. What does each variable hold?",
+        "hint3": lines[2] if len(lines) > 2 else "Try adding print() statements to see what each variable contains.",
+    }
+
 
 @app.post("/api/improve")
 async def improve_code(request: ExplainRequest):

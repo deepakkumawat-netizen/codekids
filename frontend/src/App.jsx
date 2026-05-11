@@ -255,6 +255,10 @@ export default function App() {
   const [usageRefresh, setUsageRefresh] = useState(0)
   const [chatHistory, setChatHistory] = useState([])
 
+  const [hintLevel, setHintLevel] = useState(0)
+  const [hints, setHints] = useState(null)
+  const [hintsLoading, setHintsLoading] = useState(false)
+
   const { theme, toggleTheme } = useContext(ThemeContext)
 
   const [gami, setGami] = useState(() => loadGami())
@@ -272,6 +276,25 @@ export default function App() {
     incrementUsage(userId, 'codekids')
     setUsageRefresh(n => n + 1)
   }
+  const fetchHints = async () => {
+    if (hintsLoading) return
+    setHintsLoading(true)
+    setHints(null)
+    try {
+      const res = await fetch('/api/hints', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, language: language.value, grade_level: grade }),
+      })
+      const data = await res.json()
+      setHints(data)
+    } catch {
+      setHints({ hint1: 'Could not load hints. Try again.', hint2: '', hint3: '' })
+    } finally {
+      setHintsLoading(false)
+    }
+  }
+
   const textareaRef = useRef(null)
   const lineNumbersRef = useRef(null)
 
@@ -348,6 +371,8 @@ export default function App() {
     setAiMode(null)
     setOutputError(false)
     setChatHistory([])
+    setHints(null)
+    setHintLevel(0)
   }
 
   const handleRun = async () => {
@@ -655,131 +680,68 @@ export default function App() {
             </div>
           )}
 
-          {/* AI Help */}
+          {/* AI Help — Hints */}
           {activePanel === 'ai' && (
             <div className="side-content">
-              <div className="ai-grid">
-                {AI_ACTIONS.map(action => (
+              {/* Hint buttons */}
+              <div style={{ display:'flex', gap:8, padding:'14px 12px 8px' }}>
+                {[1, 2, 3].map(n => (
                   <button
-                    key={action.id}
-                    className={`ai-btn ${aiMode === action.id ? 'ai-btn--active' : ''}`}
-                    onClick={() => handleAI(action)}
-                    disabled={aiLoading}
+                    key={n}
+                    onClick={() => {
+                      setHintLevel(n)
+                      if (!hints) fetchHints()
+                    }}
+                    disabled={hintsLoading}
+                    style={{
+                      flex: 1, padding: '11px 6px', borderRadius: 10,
+                      background: hintLevel === n ? '#399aff' : 'var(--bg-hover)',
+                      color: hintLevel === n ? '#fff' : 'var(--text)',
+                      fontWeight: 700, fontSize: 13, cursor: hintsLoading ? 'wait' : 'pointer',
+                      border: `1.5px solid ${hintLevel === n ? '#399aff' : 'var(--border)'}`,
+                      transition: 'all 0.2s',
+                    }}
                   >
-                    <span className="ai-btn-emoji">{action.emoji}</span>
-                    <span className="ai-btn-label">{action.label}</span>
+                    💡 Hint {n}
                   </button>
                 ))}
               </div>
 
-              {aiLoading && (
+              {hintsLoading && (
                 <div className="ai-loading">
                   <span className="spin spin--dark" />
-                  <span>Thinking…</span>
+                  <span>Getting hints…</span>
                 </div>
               )}
 
-              {aiResult && !aiLoading && (
-                <div className="ai-result">
-                  <div className="ai-result-header">
-                    {AI_ACTIONS.find(a => a.id === aiMode)?.emoji}{' '}
-                    {AI_ACTIONS.find(a => a.id === aiMode)?.label}
+              {hintLevel > 0 && hints && !hintsLoading && (
+                <div style={{
+                  margin: '8px 12px 12px', padding: '14px 16px',
+                  background: 'rgba(57,154,255,0.08)',
+                  border: '1.5px solid #399aff',
+                  borderRadius: 12, position: 'relative',
+                }}>
+                  <button
+                    onClick={() => setHintLevel(0)}
+                    title="Close hint"
+                    style={{
+                      position: 'absolute', top: 8, right: 10,
+                      background: 'none', border: 'none',
+                      color: 'var(--text-muted,#888)', fontSize: 20,
+                      cursor: 'pointer', lineHeight: 1, padding: '2px 4px',
+                    }}
+                  >×</button>
+                  <div style={{ fontWeight: 700, color: '#399aff', fontSize: 13, marginBottom: 8 }}>
+                    💡 Hint {hintLevel}
                   </div>
-                  <div className="ai-result-body">
-                    {aiMode === 'debug' ? (
-                      // Debug tool - Show errors in red, solutions in green
-                      <div className="debug-content">
-                        {aiResult.split('\n\n').map((section, idx) => {
-                          const isError = section.toLowerCase().includes('error') || section.toLowerCase().includes('problem')
-                          const isSolution = section.toLowerCase().includes('try') || section.toLowerCase().includes('fix') || section.toLowerCase().includes('hint')
-
-                          return (
-                            <div key={idx} className="debug-section">
-                              {isError && (
-                                <div className="debug-error-header">
-                                  <span className="ai-chip ai-chip-error">❌ Error</span>
-                                </div>
-                              )}
-                              {isSolution && (
-                                <div className="debug-solution-header">
-                                  <span className="ai-chip ai-chip-solution">✓ Solution</span>
-                                </div>
-                              )}
-                              <div className={`debug-text ${isError ? 'error-text' : isSolution ? 'solution-text' : ''}`}>
-                                {section.split('\n').map((line, j) => (
-                                  <p key={j} className="ai-line">{line}</p>
-                                ))}
-                              </div>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    ) : (
-                      // Other tools - Standard colored chips formatting
-                      aiResult.split('\n\n').map((paragraph, i) => (
-                        <div key={i} className="ai-paragraph">
-                          {paragraph.split('\n').map((line, j) => {
-                            // Format section headers with colored chips
-                            if (line.match(/^#{1,3}\s|^[A-Z][A-Z\s]+:$/)) {
-                              return (
-                                <div key={j} className="ai-section-header">
-                                  <span className={`ai-chip ai-chip-${i % 5}`}>
-                                    {line.replace(/^#+\s/, '').replace(/:$/, '')}
-                                  </span>
-                                </div>
-                              )
-                            }
-                            // Format bullet points
-                            if (line.trim().startsWith('-') || line.trim().startsWith('•')) {
-                              return (
-                                <div key={j} className="ai-bullet">
-                                  • {line.replace(/^[-•]\s?/, '')}
-                                </div>
-                              )
-                            }
-                            // Format code blocks
-                            if (line.trim().startsWith('```')) {
-                              return null
-                            }
-                            return (
-                              <p key={j} className="ai-line">
-                                {line}
-                              </p>
-                            )
-                          })}
-                        </div>
-                      ))
-                    )}
+                  <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7, paddingRight: 20 }}>
+                    {hints[`hint${hintLevel}`]}
                   </div>
                 </div>
               )}
 
-              {/* Search Interface for Analyze Tool */}
-              {aiMode === 'analyze' && (
-                <>
-                  <form onSubmit={handleSearch} className="ai-search">
-                    <input
-                      type="text"
-                      className="ai-search-input"
-                      placeholder="Search topics: variables, loop, function, array, string, etc."
-                      value={searchQuery}
-                      onChange={e => setSearchQuery(e.target.value)}
-                    />
-                    <button type="button" className="ai-search-voice" onClick={handleVoiceSearch} title="Search by voice">
-                      🎤
-                    </button>
-                    <button type="submit" className="ai-search-btn" disabled={!searchQuery.trim()}>
-                      Search
-                    </button>
-                  </form>
-                  {!aiResult && !aiLoading && (
-                    <p className="ai-hint">Try searching: variables, loop, function, array, string, conditionals, data types, recursion, object, class, algorithm, debugging</p>
-                  )}
-                </>
-              )}
-
-              {!aiResult && !aiLoading && aiMode !== 'analyze' && (
-                <p className="ai-hint">Choose an option above to get AI-powered help with your code.</p>
+              {hintLevel === 0 && !hintsLoading && (
+                <p className="ai-hint">Click a hint button above to get help with your code. Start with Hint 1!</p>
               )}
             </div>
           )}
