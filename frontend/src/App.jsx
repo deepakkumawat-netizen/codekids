@@ -265,7 +265,9 @@ function RewardsPanel({ gami }) {
 }
 
 export default function App() {
-  const [entered, setEntered] = useState(() => !!localStorage.getItem('codekids_seen_landing'))
+  // Logged-in users skip the landing; everyone else sees it on every fresh visit
+  // (in-memory only — "Try it now" works per-session but does not silence the landing forever).
+  const [entered, setEntered] = useState(() => !!localStorage.getItem('codekids_user'))
   const [language, setLanguage]     = useState(LANGUAGES[0])
   const [grade, setGrade]           = useState('6')
   const [code, setCode]             = useState(LANGUAGES[0].default)
@@ -562,7 +564,7 @@ export default function App() {
   }
 
   if (!entered) {
-    return <Landing onEnter={() => { localStorage.setItem('codekids_seen_landing', '1'); setEntered(true) }} />
+    return <Landing onEnter={() => setEntered(true)} />
   }
 
   return (
