@@ -3,6 +3,7 @@ import './index.css'
 import UsageCounter, { incrementUsage, checkUsageExceeded } from './components/UsageCounter'
 import ChatHistory, { saveChatToHistory } from './components/ChatHistory'
 import { ThemeContext } from './context/ThemeContext'
+import Landing from './Landing'
 
 const LANGUAGES = [
   { value: 'python',     label: 'Python',     ext: 'py',   default: '# Welcome to CodeKids!\nprint("Hello, World!")' },
@@ -232,6 +233,7 @@ function RewardsPanel({ gami }) {
 }
 
 export default function App() {
+  const [entered, setEntered] = useState(() => !!localStorage.getItem('codekids_seen_landing'))
   const [language, setLanguage]     = useState(LANGUAGES[0])
   const [grade, setGrade]           = useState('6')
   const [code, setCode]             = useState(LANGUAGES[0].default)
@@ -525,6 +527,10 @@ export default function App() {
         }
       })
     }
+  }
+
+  if (!entered) {
+    return <Landing onEnter={() => { localStorage.setItem('codekids_seen_landing', '1'); setEntered(true) }} />
   }
 
   return (
