@@ -5,6 +5,38 @@ import ChatHistory, { saveChatToHistory } from './components/ChatHistory'
 import { ThemeContext } from './context/ThemeContext'
 import Landing from './Landing'
 
+function ProfileMenu() {
+  const [open, setOpen] = useState(false)
+  const user = (() => { try { return JSON.parse(localStorage.getItem('codekids_user') || '{}') } catch { return {} } })()
+  const initial = (user.name || user.email || 'U').charAt(0).toUpperCase()
+  const signOut = () => {
+    localStorage.removeItem('codekids_user')
+    localStorage.removeItem('codekids_seen_landing')
+    window.location.reload()
+  }
+  return (
+    <div style={{ position: 'relative', marginLeft: 12 }}>
+      <button onClick={() => setOpen(o => !o)} title={user.name || 'Profile'}
+        style={{ width: 36, height: 36, borderRadius: '50%', border: '2px solid var(--border)', background: 'var(--accent-blue)', color: '#fff', fontWeight: 700, fontSize: 15, cursor: 'pointer' }}>
+        {initial}
+      </button>
+      {open && (
+        <>
+          <div onClick={() => setOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 998 }} />
+          <div style={{ position: 'absolute', top: 'calc(100% + 8px)', right: 0, minWidth: 220, background: 'var(--bg-elevated)', border: '1.5px solid var(--border)', borderRadius: 12, boxShadow: 'var(--shadow)', zIndex: 999, padding: 14 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 2 }}>{user.name || 'User'}</div>
+            <div style={{ fontSize: 12, color: 'var(--text-2)', marginBottom: 12, wordBreak: 'break-all' }}>{user.email || ''}</div>
+            <button onClick={signOut}
+              style={{ width: '100%', padding: '8px 12px', borderRadius: 8, border: '1.5px solid #ff6b7a', background: 'transparent', color: '#ff6b7a', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
+              Sign Out
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
 const LANGUAGES = [
   { value: 'python',     label: 'Python',     ext: 'py',   default: '# Welcome to CodeKids!\nprint("Hello, World!")' },
   { value: 'javascript', label: 'JavaScript', ext: 'js',   default: '// Welcome to CodeKids!\nconsole.log("Hello, World!");' },
@@ -609,6 +641,7 @@ export default function App() {
           >
             {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
           </button>
+          <ProfileMenu />
         </div>
       </header>
 
