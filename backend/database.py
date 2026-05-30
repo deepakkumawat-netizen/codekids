@@ -28,6 +28,7 @@ class CodeKidsDatabase:
             CREATE TABLE IF NOT EXISTS chat_history (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id TEXT NOT NULL,
+                session_id TEXT,
                 tool_name TEXT,
                 language TEXT,
                 code TEXT,
@@ -35,6 +36,12 @@ class CodeKidsDatabase:
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
+        try:
+            cols = [r[1] for r in c.execute("PRAGMA table_info(chat_history)").fetchall()]
+            if 'session_id' not in cols:
+                c.execute("ALTER TABLE chat_history ADD COLUMN session_id TEXT")
+        except Exception as _e:
+            print(f"[DB] session_id migration warning: {_e}")
 
         # Usage tracking table
         c.execute('''
@@ -104,24 +111,82 @@ class CodeKidsDatabase:
         conn.close()
         print("[DB] CodeKids database initialized with adaptive learning tables")
 
-    def save_chat(self, user_id: str, tool_name: str, code: str, response: str, language: str = "") -> int:
-        """Save chat session to history"""
+    def save_chat(self, user_id: str, tool_name: str, code: str, response: str,
+                  language: str = "", session_id: str = None) -> int:
+        """Save chat session to history (tagged with active login session_id)"""
         conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
 
         c.execute('''
-            INSERT INTO chat_history (user_id, tool_name, language, code, response)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (user_id, tool_name, language, code, response))
+            INSERT INTO chat_history (user_id, session_id, tool_name, language, code, response)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ''', (user_id, session_id, tool_name, language, code, response))
 
         chat_id = c.lastrowid
         conn.commit()
         conn.close()
 
-        # Cleanup old chats (keep only last 7)
-        self.cleanup_old_chats(user_id, tool_name)
+        # Keep last 100 per user/tool so date/session filters are useful.
+        self.cleanup_old_chats(user_id, tool_name, keep_count=100)
 
         return chat_id
+
+    def get_history(self, user_id: str, tool_name: str = "", date_from: str = None,
+                    date_to: str = None, session_id: str = None, limit: int = 100) -> list:
+        """Get history with optional date/session filters."""
+        conn = sqlite3.connect(self.db_path)
+        c = conn.cursor()
+        sql = '''SELECT id, session_id, tool_name, language, code, response, created_at
+                 FROM chat_history WHERE user_id = ?'''
+        params = [user_id]
+        if tool_name:
+            sql += ' AND tool_name = ?'; params.append(tool_name)
+        if date_from:
+            sql += ' AND date(created_at) >= date(?)'; params.append(date_from)
+        if date_to:
+            sql += ' AND date(created_at) <= date(?)'; params.append(date_to)
+        if session_id:
+            sql += ' AND session_id = ?'; params.append(session_id)
+        sql += ' ORDER BY created_at DESC LIMIT ?'
+        params.append(int(limit))
+        c.execute(sql, params)
+        rows = c.fetchall()
+        conn.close()
+        out = []
+        for r in rows:
+            code = r[4] or ''
+            out.append({
+                'id': r[0],
+                'session_id': r[1],
+                'tool_name': r[2],
+                'language': r[3],
+                'code': code,
+                'response': r[5],
+                'created_at': r[6],
+                'preview': (code[:80] + '...') if len(code) > 80 else code,
+            })
+        return out
+
+    def list_sessions(self, user_id: str, tool_name: str = "") -> list:
+        conn = sqlite3.connect(self.db_path)
+        c = conn.cursor()
+        if tool_name:
+            c.execute('''
+                SELECT session_id, COUNT(*), MIN(created_at), MAX(created_at)
+                FROM chat_history
+                WHERE user_id = ? AND tool_name = ? AND session_id IS NOT NULL AND session_id != ''
+                GROUP BY session_id ORDER BY MAX(created_at) DESC LIMIT 50
+            ''', (user_id, tool_name))
+        else:
+            c.execute('''
+                SELECT session_id, COUNT(*), MIN(created_at), MAX(created_at)
+                FROM chat_history
+                WHERE user_id = ? AND session_id IS NOT NULL AND session_id != ''
+                GROUP BY session_id ORDER BY MAX(created_at) DESC LIMIT 50
+            ''', (user_id,))
+        rows = c.fetchall()
+        conn.close()
+        return [{'session_id': r[0], 'count': r[1], 'first_at': r[2], 'last_at': r[3]} for r in rows]
 
     def get_last_7_chats(self, user_id: str, tool_name: str = "") -> list:
         """Get last 7 chat sessions for a user/tool"""

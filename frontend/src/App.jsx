@@ -12,6 +12,7 @@ function ProfileMenu() {
   const signOut = () => {
     localStorage.removeItem('codekids_user')
     localStorage.removeItem('codekids_seen_landing')
+    localStorage.removeItem('codekids_session_id')
     window.location.reload()
   }
   return (
@@ -565,7 +566,13 @@ export default function App() {
   }
 
   if (!entered) {
-    return <Landing onEnter={() => setEntered(true)} />
+    return <Landing onEnter={() => {
+      // Mint a fresh session_id each time the user enters the tool so
+      // every login / Try-it-now is a distinct group in the history.
+      const sid = 'sess_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8)
+      localStorage.setItem('codekids_session_id', sid)
+      setEntered(true)
+    }} />
   }
 
   return (

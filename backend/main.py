@@ -73,8 +73,17 @@ class SaveChatRequest(BaseModel):
     code: str
     response: str
     language: str = ""
+    session_id: str | None = None
 
 class ChatHistoryRequest(BaseModel):
+    user_id: str
+    tool_name: str = ""
+    date_from: str | None = None
+    date_to: str | None = None
+    session_id: str | None = None
+    limit: int = 100
+
+class SessionListRequest(BaseModel):
     user_id: str
     tool_name: str = ""
 
@@ -690,14 +699,15 @@ async def search_study_topics(request: dict):
 
 @app.post("/api/save-chat")
 async def save_chat(request: SaveChatRequest):
-    """Save chat session to history"""
+    """Save chat session to history (tagged with active login session_id)"""
     try:
         chat_id = db.save_chat(
             request.user_id,
             request.tool_name,
             request.code,
             request.response,
-            request.language
+            request.language,
+            session_id=request.session_id,
         )
         return {"chat_id": chat_id, "success": True}
     except Exception as e:
@@ -705,12 +715,28 @@ async def save_chat(request: SaveChatRequest):
 
 @app.post("/api/chat-history")
 async def get_chat_history(request: ChatHistoryRequest):
-    """Get last 7 chat sessions"""
+    """Get chat history with optional date/session filters"""
     try:
-        chats = db.get_last_7_chats(request.user_id, request.tool_name)
+        chats = db.get_history(
+            request.user_id,
+            tool_name=request.tool_name,
+            date_from=request.date_from,
+            date_to=request.date_to,
+            session_id=request.session_id,
+            limit=request.limit,
+        )
         return {"chats": chats, "count": len(chats)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/chat-sessions")
+async def list_chat_sessions(request: SessionListRequest):
+    """List distinct login sessions for the session-filter dropdown."""
+    try:
+        sessions = db.list_sessions(request.user_id, request.tool_name)
+        return {"sessions": sessions, "success": True}
+    except Exception as e:
+        return {"sessions": [], "success": False, "error": str(e)}
 
 @app.post("/api/check-usage")
 async def check_usage(request: UsageCheckRequest):
