@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { ThemeContext } from './context/ThemeContext'
 
 const FEATURES = [
@@ -88,6 +88,12 @@ export default function Landing({ onEnter }) {
   const { theme, toggleTheme } = useContext(ThemeContext)
   const [auth, setAuth] = useState(null)
   const isDark = theme === 'dark' || document.documentElement.classList.contains('dark-mode')
+  // Rotate the hero image's Pollinations seed every 5s for fresh variations.
+  const [heroSeed, setHeroSeed] = useState(55)
+  useEffect(() => {
+    const t = setInterval(() => setHeroSeed(s => s + 1), 5000)
+    return () => clearInterval(t)
+  }, [])
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)', fontFamily: 'var(--font)' }}>
@@ -119,11 +125,12 @@ export default function Landing({ onEnter }) {
         </div>
         <div style={{ flex: '1 1 320px', minWidth: 260, display: 'flex', justifyContent: 'center' }}>
           <img
-            src="https://image.pollinations.ai/prompt/3D%20Pixar%20cartoon%20of%20a%20happy%20kid%20coding%20on%20a%20colorful%20laptop%20with%20floating%20code%20blocks%20and%20coding%20symbols%20around%2C%20Python%20JavaScript%20snippets%2C%20bright%20vibrant%20colors%2C%20clean%20white%20background%2C%20fun%20educational?width=768&height=768&seed=55&nologo=true"
+            src={`https://image.pollinations.ai/prompt/3D%20Pixar%20cartoon%20of%20a%20happy%20kid%20coding%20on%20a%20colorful%20laptop%20with%20floating%20code%20blocks%20and%20coding%20symbols%20around%2C%20Python%20JavaScript%20snippets%2C%20bright%20vibrant%20colors%2C%20clean%20white%20background%2C%20fun%20educational?width=768&height=768&seed=${heroSeed}&nologo=true`}
             alt="Kid learning to code"
             loading="lazy"
+            key={heroSeed}
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
-            style={{ width: '100%', maxWidth: 420, height: 'auto', borderRadius: 20, boxShadow: 'var(--shadow)' }}
+            style={{ width: '100%', maxWidth: 420, height: 'auto', borderRadius: 20, boxShadow: 'var(--shadow)', transition: 'opacity .4s' }}
           />
         </div>
       </section>
