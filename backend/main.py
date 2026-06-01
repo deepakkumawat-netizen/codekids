@@ -126,17 +126,21 @@ def call_ai(user_prompt: str, history: list = None, system: str = None) -> str:
         messages.extend(history[-6:])  # keep last 3 exchanges to avoid token overflow
     messages.append({"role": "user", "content": user_prompt})
     try:
-        from openai import OpenAI
-        client = OpenAI(api_key=os.getenv("GROQ_API_KEY"), base_url="https://api.groq.com/openai/v1")
-        response = client.chat.completions.create(
-            model=os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
+        from llm_client import chat_with_fallback
+        response = chat_with_fallback(
             messages=messages,
             max_tokens=2000,
             temperature=0.7,
         )
         return response.choices[0].message.content or ""
     except Exception as e:
-        return f"AI error: {str(e)}"
+        err = str(e).lower()
+        if any(s in err for s in ("rate_limit", "429", "tokens per day", "quota")):
+            return ("The AI tutor is taking a short break — today's free request "
+                    "limit was reached. Please try again in a few minutes, or pick "
+                    "a different topic to keep learning in the meantime.")
+        print(f"[codekids] LLM error: {e}")
+        return ("Sorry, I couldn't reach the AI right now. Please try again in a moment.")
 
 # ═════════════════════════════════════════════════════════════════════════════
 # ROUTES
