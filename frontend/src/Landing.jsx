@@ -158,7 +158,7 @@ export default function Landing({ onEnter }) {
 
       <footer style={{ borderTop: '1.5px solid var(--border)', padding: '24px 6vw', textAlign: 'center', color: 'var(--text-3)', fontSize: 13 }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}><span style={{ width: 8, height: 8, borderRadius: '50%', background: '#51cf8a' }} /> Powered by Codevidhya</div>
-        <div style={{ marginTop: 6 }}>© 2025 CodeKids</div>
+        <div style={{ marginTop: 6 }}>© 2026 CodeKids</div>
       </footer>
 
       {auth && <AuthModal mode={auth} onClose={() => setAuth(null)} onSwitch={() => setAuth((m) => (m === 'signup' ? 'login' : 'signup'))} onEnter={onEnter} />}
